@@ -3,6 +3,7 @@
 #include <string>
 using namespace std;
 
+// Constructor for Card class
 Card::Card()
 {
 	rank = "X";
@@ -21,6 +22,7 @@ void Card::setCard(string r, char s)
 	suit = s;
 }
 
+//Gets the value between 1-10 in numbers
 int Card::getValue()
 {
 	if (rank == "A"){
@@ -40,6 +42,7 @@ int Card::getValue()
 	}
 }
 
+//Shows the rank and suit
 void Card::show()
 {
 	cout << rank << suit << ", ";

@@ -10,122 +10,140 @@
 #include <string>
 using namespace std;
 
-Card::Card()
+class Card
 {
-	rank = "X";
-	suit = 'X';
-}
+	private:
+		string rank;
+		char suit;
 
-Card::Card(string r, char s)
-{
-	rank = r;
-	suit = s;
-}
-
-void Card::setCard(string r, char s)
-{
-	rank = r;
-	suit = s;
-}
-
-//Gets the value between 1-10 in numbers
-int Card::getValue()
-{
-	if (rank == "A"){
-		return 1;
-	}
-	else if (rank == "J"){
-		return 10;
-	}
-	else if (rank == "Q"){
-			return 10;
-	}
-	else if (rank == "K"){
-			return 10;
-	}
-	else{
-		return stoi(rank);
-	}
-}
-
-//Shows the rank and suit
-void Card::show()
-{
-	cout << rank << suit << ", ";
-}
-
-
-Deck::Deck()
-{
-	resetDeck();
-}
-
-void Deck::resetDeck()
-{
-	track = 0;
-	string ranks[13] =  {"A", "2","3","4","5","6","7","8","9","10","J","Q","K"};
-	char suits[4] = {'S', 'H', 'D', 'C'};
-	for (int i = 0; i < 4; i++){
-		for (int j = 0; j < 13; j++){
-			cards[track].setCard(ranks[j], suits[i]);
-			track++;
-		}
-	}
-}
-
-Card Deck::deal()
-{
-	track--;
-	return cards[track];
-}
-
-void Deck::shuffle()
-{
-	Card temp;
-	int rando;
-	srand(time(0));
-	for (int i = 0; i < 52; i++){
-		
-		
-		rando = rand()%52;
-
-		temp = cards[i];
-		cards[i] = cards[rando];
-		cards[rando] = temp;
-		
-
-		
-	track = 52;
-	}
-	
-}
-
-bool Deck::isEmpty()
-{
-	if (track == 0)
-	{
-		return true;
-	}
-	else
-	{
-		return false;
-	}
-}
-
-void Deck::show()
-{
-	int check;
-	check = 0;
-	for (int i = 0; i < 4; i++)
-	{
-		for (int j = 0; j < 13; j++)
+	public:
+		Card()
 		{
-			cards[check].show();
-			check++;
+			rank = "X";
+			suit = 'X';
 		}
-	cout << endl;
-	}
-}
+
+		Card(string r, char s)
+		{
+			rank = r;
+			suit = s;
+		}
+
+		void setCard(string r, char s)
+		{
+			rank = r;
+			suit = s;
+		}
+
+		//Gets the value between 1-10 in numbers
+		int getValue()
+		{
+			if (rank == "A"){
+				return 1;
+			}
+			else if (rank == "J"){
+				return 10;
+			}
+			else if (rank == "Q"){
+					return 10;
+			}
+			else if (rank == "K"){
+					return 10;
+			}
+			else{
+				return stoi(rank);
+			}
+		}
+
+		//Shows the rank and suit
+		void show()
+		{
+			cout << rank << suit << ", ";
+		}
+
+};
+
+
+class Deck
+{
+	private:
+		Card cards[52];
+		int track;
+
+	public:
+		Deck()
+		{
+			resetDeck();
+		}
+
+		void resetDeck()
+		{
+			track = 0;
+			string ranks[13] =  {"A", "2","3","4","5","6","7","8","9","10","J","Q","K"};
+			char suits[4] = {'S', 'H', 'D', 'C'};
+			for (int i = 0; i < 4; i++){
+				for (int j = 0; j < 13; j++){
+					cards[track].setCard(ranks[j], suits[i]);
+					track++;
+				}
+			}
+		}
+
+		Card deal()
+		{
+			track--;
+			return cards[track];
+		}
+
+		void shuffle()
+		{
+			Card temp;
+			int rando;
+			srand(time(0));
+			for (int i = 0; i < 52; i++){
+				
+				
+				rando = rand()%52;
+
+				temp = cards[i];
+				cards[i] = cards[rando];
+				cards[rando] = temp;
+				
+
+				
+			track = 52;
+			}
+			
+		}
+
+		bool isEmpty()
+		{
+			if (track == 0)
+			{
+				return true;
+			}
+			else
+			{
+				return false;
+			}
+		}
+
+		void show()
+		{
+			int check;
+			check = 0;
+			for (int i = 0; i < 4; i++)
+			{
+				for (int j = 0; j < 13; j++)
+				{
+					cards[check].show();
+					check++;
+				}
+			cout << endl;
+			}
+		}
+};
+
 
 
 
@@ -173,27 +191,25 @@ bool play(Deck newDeck)
 }
 
 
-
-
 int main()
 {
 	int choice;
 	Deck myDeck;
-	while (choice != 6)
+	while (choice)
 	{
 		
-		cout << "Playing Fibonacci Solitaire!\n" << endl;
+		cout << "\nPlaying Fibonacci Solitaire!\n" << endl;
 
-		cout << "1) Create New Deck\n2) Shuffle Deck\n3) Display Deck\n4) Play Fibo Solitaire\n5) Win Fibo Solitaire\n6) Exit\nEnter Choice:" << endl;
+		cout << "1) Create New Deck\n2) Shuffle Deck\n3) Display Deck\n4) Play Fibo Solitaire\n5) Win Fibo Solitaire\n6) Exit\nEnter Choice: ";
 		cin >> choice;
 		if (choice == 1)
 		{
 				myDeck.resetDeck();
-				cout << "New Deck has been created!\n"<<endl;
+				cout << "\nNew Deck has been created!\n"<<endl;
 		}
 		else if(choice == 2)
 		{
-			cout << "Deck is shuffled!\n"<<endl;
+			cout << "\nDeck is shuffled!\n"<<endl;
 			myDeck.shuffle();
 		}
 		else if (choice ==3)
@@ -215,11 +231,16 @@ int main()
 				
 			}
 			myDeck.shuffle();
-			cout << "Games played: " << games << endl;
-		}else{
-			cout << "Invalid input, try again!\n" << endl;
+			cout << "\nGames played: " << games << endl;
+		}
+		else if (choice == 6)
+		{
+			cout << "\nThanks for playing!\n"<< endl;
+			break;
+		}
+		else
+		{
+			cout << "\nInvalid input, try again!\n" << endl;
 		}
 	}
-	cout << "Thanks for playing!\n"<< endl;
-	
 }

@@ -29,7 +29,7 @@ void bubbleSort(int arr[], int n)
 }
 
 
-int main()
+int main(int argc, char* argv[])
 {
     int arr[];
     bubbleSort(arr[]);

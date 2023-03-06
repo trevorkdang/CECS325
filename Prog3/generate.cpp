@@ -7,10 +7,24 @@ int main(int argc, char* argv[])
 {
     if (argc < 4)
     {
-
+        cerr << "Usage: " << argv[0] << "Count Min Max" << endl;
     }
+
+    for (int i = 0; i < argc; i++);
+    {
+        cout << argv[i] << endl;
+    }
+
     int n = stoi(argv[1]);
     int min = stoi(argv[2]);
     int max = stoi(argv[3]);
+
+    ofstream ofile("numbers.dat");
+    for (int i = 0; i < n; i++)
+    {
+        ofile << rand() % (max - min + 1) + min << endl;
+    }
+    ofile.close();
+    return 0;
 
 }

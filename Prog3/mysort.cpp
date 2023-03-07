@@ -19,9 +19,9 @@ void bubbleSort(int arr[], int n)
         {
             if (arr[j] > arr[j+1])
             {
-                int temp = arr[i];
-                arr[i] = arr[i+1];
-                arr[i+1] = temp;
+                int temp = arr[j];
+                arr[j] = arr[j+1];
+                arr[j+1] = temp;
             }
         }
     }
@@ -29,10 +29,51 @@ void bubbleSort(int arr[], int n)
 }
 
 
+const int max_nums = 1000000;
+
 int main(int argc, char* argv[])
 {
-    int arr[];
-    bubbleSort(arr[]);
+    if (argc < 3)
+    {
+        cerr << "Usage: " << argv[0] << "Input Output" << endl;
+    }
+
+    ifstream ifile(argv[1]);
+    if (!ifile.is_open())
+    {
+        cerr << "Failed to open input file" << argv[1] << endl;
+    }
+
+    int numbers[max_nums];
+    int count  = 0;
+    int nums;
+    while (ifile >> num)
+    {
+        numbers[count] = nums;
+        count++;
+        if (count >= max_nums)
+        {
+            cerr << "Input file contains too many numbers" << endl;
+        }
+    }
+
+    ifile.close()
+
+    bubbleSort(numbers, count);
+
+    ofstream ofile(argv[2]);
+    if (!ofile.is_open())
+    {
+        cerr << "Failed to open output file" << argv[2] << endl;
+    }
+
+    for (int i = 0; i < count; i++)
+    {
+        ofile << numbers[i] << endl;
+        cout << numbers[i] << endl;
+    }
+
+    ofile.close()
     return 0;
 
 }

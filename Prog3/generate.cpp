@@ -15,12 +15,12 @@ int main(int argc, char* argv[])
         cout << argv[i] << endl;
     }
 
-    int n = stoi(argv[1]);
+    int count = stoi(argv[1]);
     int min = stoi(argv[2]);
     int max = stoi(argv[3]);
 
     ofstream ofile("numbers.dat");
-    for (int i = 0; i < n; i++)
+    for (int i = 0; i < count; i++)
     {
         ofile << rand() % (max - min + 1) + min << endl;
     }

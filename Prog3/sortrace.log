@@ -1,0 +1,15 @@
+Generating 1000000 random numbers
+generate
+1000000
+100000
+999999
+Starting system sort
+
+real	0m0.286s
+user	0m0.594s
+sys	0m0.313s
+Starting my sort
+
+real	38m35.379s
+user	38m13.500s
+sys	0m4.094s

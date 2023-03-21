@@ -8,7 +8,14 @@
 
 #include <iostream>
 #include <fstream>
+#include <pthread.h>
 using namespace std;
+
+struct pthread_args {
+    int *arr; //pointer to array
+    int left; //start index of array
+    int right; //end index of array to sort
+};
 
 //bubble sort function without using swap and used a temp var instead
 void bubbleSort(int arr[], int n)
@@ -27,6 +34,48 @@ void bubbleSort(int arr[], int n)
     }
 }
 
+void merge(int arr[], int left, int mid, int right)
+{
+    int i = left;
+    int j = mid;
+    int k = 0;
+    int temp[right - left];
+    
+    while (i < mid && j < right)
+    {
+        if arr[i] <= arr[j]
+        {
+            temp[k] = arr[i];
+            i++;
+        }
+        else
+        {
+            temp[k] = arr[j];
+            j++;
+        }
+        k++;
+    }
+
+    while (i < mid)
+    {
+        temp[k] = arr[i];
+        i++;
+        k++;
+    }
+
+    while (j < right)
+    {
+        temp[k] = arr[j];
+        j++;
+        k++;
+    }
+
+    for (int x = 0; x < k; x++)
+    {
+        arr[left + x] = temp[x];
+    }
+}
+
 
 int main(int argc, char* argv[])
 {
@@ -34,6 +83,14 @@ int main(int argc, char* argv[])
     {
         cerr << "Usage: " << argv[0] << "Input Output" << endl;
         return 1;
+    }
+
+    pthread_args argList[4];
+    for (int i = 0; i < 4; i++)
+    {
+        argList[i].arr = arr[i];
+        argList[i].left = l
+        argList[i].right = r
     }
 
     ifstream ifile(argv[1]); //input file

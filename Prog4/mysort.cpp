@@ -12,7 +12,7 @@
 using namespace std;
 
 struct list {
-    int *arr; 
+    int *array; 
     int arrSize; 
     int wait; 
 };
@@ -20,66 +20,61 @@ struct list {
 //bubble sort function without using swap and used a temp var instead
 void *bubbleSort(void *arr)
 {
-    list *arg = (list *) arr
-    int *arr = arg->arr;
+    list *arg = (list *) arr;
+    int *arrayL = arg->array;
     int arrSize = arg->arrSize;
     int wait = arg->wait;
 
     
-    for (int i = 0; i < arrSize-1; i++)
+    for (int i = 0; i < arrSize; i++)
     {
-        for (int j = 0; j < arrSizze-i-1; j++)
+        for (int j = 0; j < arrSize-i-1; j++)
         {
-            if (arr[j] > arr[j+1])
+            if (arrayL[j] > arrayL[j+1])
             {
-                int temp = arr[j];
-                arr[j] = arr[j+1];
-                arr[j+1] = temp;
+                int temp = arrayL[j];
+                arrayL[j] = arrayL[j+1];
+                arrayL[j+1] = temp;
             }
         }
     }
+    return NULL;
 }
 
-void merge(int arr[], int left, int mid, int right)
+void merge(int *arr, int left, int mid, int right)
 {
     int i = left;
     int j = mid;
     int k = 0;
-    int temp[right - left];
+    int *temp = new int[right - left];
     
     while (i < mid && j < right)
     {
-        if arr[i] <= arr[j]
+        if (arr[i] < arr[j])
         {
-            temp[k] = arr[i];
-            i++;
+            temp[k++] = arr[i++];
         }
         else
         {
-            temp[k] = arr[j];
-            j++;
+            temp[k++] = arr[j++];
         }
-        k++;
     }
 
     while (i < mid)
     {
-        temp[k] = arr[i];
-        i++;
-        k++;
+        temp[k++] = arr[i++];
     }
 
     while (j < right)
     {
-        temp[k] = arr[j];
-        j++;
-        k++;
+        temp[k++] = arr[j++];
     }
 
-    for (int x = 0; x < k; x++)
+    for (int x = left, y = 0; x < right; x++, y++)
     {
-        arr[left + x] = temp[x];
+        arr[x] = temp[y];
     }
+    delete [] temp;
 }
 
 
@@ -91,13 +86,7 @@ int main(int argc, char* argv[])
         return 1;
     }
 
-    pthread_args argList[8];
-    /*for (int i = 0; i < 4; i++)
-    {
-        argList[i].arr = arr[i];
-        argList[i].left = l
-        argList[i].right = r
-    }*/
+    list argList[8];
 
     ifstream ifile(argv[1]); //input file
     if (!ifile.is_open())
@@ -120,23 +109,26 @@ int main(int argc, char* argv[])
             return 1;
         }
     }
-
     ifile.close();
+    
 
-    int sizeArr = nums;
-    int size = nums/8;
 
-    for (int i = 0; i <8; i++)
+    int sizeArr = count;
+    int size = count/8;
+
+    for (int i = 0; i < 8; i++)
     {
         argList[i].arrSize = size;
+
         if (i == 0)
         {
-            argList[i].arr = numbers;
+            argList[i].array = numbers;
         }
         else
         {
-            argList[i].arr = argList[i-1].arr + argList[i].arrSize;
+            argList[i].array = argList[i-1].array + argList[i].arrSize;
         }
+
         argList[i].wait = rand()%8;
     }
 
@@ -162,12 +154,20 @@ int main(int argc, char* argv[])
     pthread_join(thread6, NULL);
     pthread_join(thread7, NULL);
 
-    int subArrSize = argList[1].arrSize;
+    int subSize = argList[1].arrSize;
 
-    for (int i = 0; )
+    for (int i = 0; i < 8; i+=2)
+    {
+        merge(numbers, (i)*(subSize), (i+1)*(subSize), (i+2)*(subSize));
+    }
 
+    for (int j=0; j < 4; j+=2)
+    {
+        merge(numbers, (j)*(2)*(subSize), (j+1)*(2)*(subSize), (j+2)*(2)*(subSize));
+    }
 
-    
+    merge(numbers, 0, (4)*(subSize), (8)*(subSize));
+
 
     ofstream ofile(argv[2]); //output file that holds sorted array
     if (!ofile.is_open())
@@ -175,12 +175,15 @@ int main(int argc, char* argv[])
         cerr << "Cannot open output file" << argv[2] << endl;
     }
 
-    for (int i = 0; i < count; i++)
+    for (int i = 0; i < sizeArr - 1; i++)
     {
         ofile << numbers[i] << endl;
     }
+    ofile << numbers[sizeArr - 1];
 
     ofile.close();
     return 0;
 
 }
+
+

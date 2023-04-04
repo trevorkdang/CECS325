@@ -1,0 +1,19 @@
+My machine has this many processors
+16
+Generating 1000000 random numbers
+generate
+1000000
+100000
+999999
+Starting system sort
+
+real	0m0.246s
+user	0m0.563s
+sys	0m0.188s
+Starting my sort
+Usage: mysort Input Output
+
+real	0m0.013s
+user	0m0.000s
+sys	0m0.000s
+All done

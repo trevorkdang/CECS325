@@ -192,12 +192,12 @@ int main(int argc, char* argv[])
         cerr << "Cannot open output file" << argv[2] << endl;
     }*/
 
-    for (int i = 0; i < sizeArr - 1; i++)
+    /*for (int i = 0; i < sizeArr - 1; i++)
     {
         //ofile << numbers[i] << endl;
         cout << numbers[i] << endl;
     }
-    //ofile << numbers[sizeArr - 1];
+    //ofile << numbers[sizeArr - 1];*/
     
     cout << numbers[sizeArr - 1];
     // ofile.close();

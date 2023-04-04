@@ -7,6 +7,7 @@
 ############################################################
 echo My machine has this many processors
 nproc                   #this is for windows; counts the number of threads
+#sysct1 -n hw. Ncpu      #this is for Mac
 echo Generating 1000000 random numbers
 sleep 1
 generate 1000000 100000 999999 #you have to write generate.cpp

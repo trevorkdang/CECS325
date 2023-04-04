@@ -135,31 +135,16 @@ int main(int argc, char* argv[])
 
     int sizeArr = count;
     int size = sizeArr/8;
+    
 
-    /*for (int i = 0; i < 8; i++)
-    {
-        argList[i].arrSize = size;
-
-        if (i == 0)
-        {
-            argList[i].array = numbers;
-        }
-        else
-        {
-            argList[i].array = argList[i-1].array + argList[i].arrSize;
-        }
-
-        argList[i].wait = rand()%8;
-    }*/
-
-    thread thread1 (quickSort, numbers, 0, size - 1);
-    thread thread2 (quickSort, numbers, size, 2 * size - 1);
-    thread thread3 (quickSort, numbers, 2 * size, 3 * size - 1);
-    thread thread4 (quickSort, numbers, 3 * size, 4 * size - 1);
-    thread thread5 (quickSort, numbers, 4 * size, 5 * size - 1);
-    thread thread6 (quickSort, numbers, 5 * size, 6 * size - 1);
-    thread thread7 (quickSort, numbers, 6 * size, 7 * size - 1);
-    thread thread8 (quickSort, numbers, 7 * size, sizeArr - 1);
+    thread thread1(quickSort, numbers, 0, size - 1);
+    thread thread2(quickSort, numbers, size, 2 * size - 1);
+    thread thread3(quickSort, numbers, 2 * size, 3 * size - 1);
+    thread thread4(quickSort, numbers, 3 * size, 4 * size - 1);
+    thread thread5(quickSort, numbers, 4 * size, 5 * size - 1);
+    thread thread6(quickSort, numbers, 5 * size, 6 * size - 1);
+    thread thread7(quickSort, numbers, 6 * size, 7 * size - 1);
+    thread thread8(quickSort, numbers, 7 * size, sizeArr - 1);
 
     thread1.join();
     thread2.join();
@@ -192,15 +177,14 @@ int main(int argc, char* argv[])
         cerr << "Cannot open output file" << argv[2] << endl;
     }*/
 
-    /*for (int i = 0; i < sizeArr - 1; i++)
+    for (int i = 0; i < sizeArr; i++)
     {
         //ofile << numbers[i] << endl;
         cout << numbers[i] << endl;
     }
     //ofile << numbers[sizeArr - 1];*/
     
-    cout << numbers[sizeArr - 1];
-    // ofile.close();
+    
     return 0;
 
 }

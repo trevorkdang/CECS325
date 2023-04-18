@@ -8,11 +8,12 @@
 
 #include <iostream>
 #include <fstream>
-#include <string>
 #include <thread>
+#include <string>
 #include <mutex>
 using namespace std;
 
+//partition function that then plugs into the quicksort function
 int partition(int arr[], int left, int right) 
 {
     int pivot = arr[right];
@@ -30,11 +31,12 @@ int partition(int arr[], int left, int right)
     return (l + 1);
 }
 
+//quicksort function that uses recursion to sort the array
 void quickSort(int arr[], int left, int right) 
 {
     if (left < right) 
     {
-        int p = partition(arr, left, right);
+        int p = partition(arr, left, right); //aka the pivot
 
         quickSort(arr, left, p - 1);
 
@@ -42,12 +44,13 @@ void quickSort(int arr[], int left, int right)
     }
 }
 
+//merge function that merges the sections back into one large array
 void merge(int* arr, int left, int mid, int right)
 {
     int i = left;
     int j = mid;
     int k = 0;
-    int l = right - left + 1;
+    int l = right - left + 1; //temp index
     int *temp = new int[l];
     
     while (i < mid && j <= right)
@@ -80,11 +83,10 @@ void merge(int* arr, int left, int mid, int right)
 }
 
 
-
 int main(int argc, char* argv[]) 
 {
-    ifstream infile(argv[1]);
-    
+    ifstream infile(argv[1]);//opens the input file
+
     const int max_num = 1000000;
     const int num_threads = 8;
     int numbers[max_num];
@@ -97,10 +99,10 @@ int main(int argc, char* argv[])
     }
     infile.close();
 
-    int subSize = count / num_threads;
-    thread threads[num_threads];
+    int subSize = count / num_threads; 
+    thread threads[num_threads];//initializes the threads
 
-    for (int i = 0; i < num_threads; i++) 
+    for (int i = 0; i < num_threads; i++) //loop that goes through each thread and sorts it individually
     {
         int left = i * subSize;
         int right = (i + 1)*(subSize) - 1;
@@ -112,13 +114,13 @@ int main(int argc, char* argv[])
         threads[i] = thread(quickSort, numbers, left, right);
     }
 
-    for (int i = 0; i < num_threads; i++) 
+    for (int i = 0; i < num_threads; i++) //joins all the threads back together
     {
         threads[i].join();
     }
 
     int merge_num = subSize;
-    while (merge_num < count) 
+    while (merge_num < count) //while loops that makes sure the # of numbers in the subSize arrays are less than the total number inputed
     {
         for (int i = 0; i < count; i += (2)*(merge_num)) 
         {
@@ -126,14 +128,14 @@ int main(int argc, char* argv[])
             int mid = i + merge_num;
             int right = min(i + (2)*(merge_num) - 1, count - 1);
             
-            merge(numbers, left, mid, right);
+            merge(numbers, left, mid, right); //merge function that uses a left, middle, and right bound to merge the numbers into one large sorted array
         }
         merge_num *= 2;
     }
 
     for (int i = 0; i < count; i++) 
     {
-        cout << numbers[i] << "\n";
+        cout << numbers[i] << "\n"; //sends the values to stdout
     }
 
     return 0;

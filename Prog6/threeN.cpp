@@ -20,6 +20,7 @@ struct Stats
     int max = 0;
     int evens = 0;
     int odds = 0;
+    int large = INT_MAX;
 };
 
 void rec(int n, Stats& stats)
@@ -36,17 +37,17 @@ void rec(int n, Stats& stats)
 
     if (n == 1)
     {
-        stats.steps++;
-        stats.odds;
         return;
     }
 
-    stats.steps;
+    stats.steps++;
+    //cout << "->(" << n << ")";
 
     if (n % 2 == 0)
     {
         stats.evens++;
         int even = n/2;
+        cout << "->(" << even << ")";
         rec(even, stats);
     }
     else
@@ -55,12 +56,114 @@ void rec(int n, Stats& stats)
         int odd = (3*n)+1;
         if (odd < n)
         {
-            throw "Overflow error";
+            throw "overflow detected for n:";
         }
+        cout << "->(" << odd << ")";
         rec(odd, stats);
     }
 }
 
+
+int main(int argc, char* argv[])
+{
+    vector<Stats> stat_Vec;
+    //int max = INT_MAX;
+    int odds = 0;
+    int evens = 0;
+
+    if (argc == 1)
+    {
+        int n;
+        cout << "Enter a 3n+1 candidate number: ";
+        cin >> n;
+        cout << "->(" << n << ")";
+
+        Stats stats;
+
+        if (n <= 0)
+        {
+            cerr << "Invalid Input" << endl;
+            return 0;
+        }
+
+        try
+        {
+            rec(n, stats);
+        }
+        catch(const char* msg)
+        {
+            cerr << "->(###overflow###)" << endl;
+            cerr << msg << stats.max << endl;
+            cerr << "something broke dude\noverflow" << endl;
+            return 0;
+        }
+
+        stats.start = n;
+        stat_Vec.push_back(stats);
+
+        cout << endl;
+        cout << "start:" << n << endl;
+        cout << "steps:" << stats.steps << endl;
+        cout << "max:" << stats.max << endl;
+        cout << "odds:" << stats.odds << endl;
+        cout << "evens:" << stats.evens << endl;
+    }
+
+    else
+    {
+        for (int i = 1; i < argc; i++)
+        {
+            int n = stoi(argv[i]);
+            cout << "\nSolving 3n+1 - starting value:" << n << endl;
+            cout << "->(" << n << ")";
+
+            if (n <= 0)
+            {
+                cerr << "Invalid Input" << endl;
+                continue;
+            }
+
+            Stats stats;
+
+            try
+            {
+                rec(n, stats);
+            }
+            catch(const char* msg)
+            {
+                //cerr << "Solving 3n+1 - starting value:" << n << endl;
+                cerr << "->(###overflow###)\n" << endl;
+                cerr << msg << n << endl;
+                cerr << "something broke dude\noverflow" << endl;
+                continue;
+            }
+
+            stats.start = n;
+            stat_Vec.push_back(stats);
+
+            if (n > stats.max)
+            {
+                stats.max = n;
+            }
+
+            /*cerr << "Solving 3n+1 - starting value:" << n << endl;
+            cerr << "->(" << n << ") " << endl;*/
+            cout << endl;
+            cout << "start:" << n << endl;
+            cout << "steps:" << stats.steps << endl;
+            cout << "max:" << stats.max << endl;
+            cout << "odds:" << stats.odds << endl;
+            cout << "evens:" << stats.evens << endl;
+            
+        }
+    }
+
+    return 0;
+}
+
+
+
+/*
 int main(int argc, char* argv[])
 {
     if (argc == 1)
@@ -88,12 +191,12 @@ int main(int argc, char* argv[])
             return 0;
         }
 
-        cout << "->(" << n << ")\n"
-            << "start:" << n << "\n"
-            << "steps:" << n << "\n"
-            << "max:" << n << "\n"
-            << "odds:" << n << "\n"
-            << "evens:" << n << endl;
+        cout << "->(" << n << ")\n";
+        cout << "start:" << n << endl;
+        cout << "steps:" << n << endl;
+        cout << "max:" << n << endl;
+        cout << "odds:" << n << endl;
+        cout << "evens:" << n << endl;
     }
     else
     {
@@ -131,14 +234,14 @@ int main(int argc, char* argv[])
             cerr << "Solving 3n+1 - starting value:" << n << endl;
             cerr << "->(" << n << ") " << endl;
             
-            cout << "start:" << n << "\n"
-                << "steps:" << stats.steps << "\n"
-                << "max:" << stats.max << "\n"
-                << "odds:" << stats.odds << "\n"
-                << "evens:" << stats.evens << endl;
+            cout << "start:" << n << endl;
+            cout << "steps:" << stats.steps << endl;
+            cout << "max:" << stats.max << endl;
+            cout << "odds:" << stats.odds << endl;
+            cout << "evens:" << stats.evens << endl;
         }
     }
     return 0;
 
     
-}
+}*/

@@ -18,156 +18,234 @@ class BigInt
     private:
         vector<char> v;
     public:
-        BigInt();
-        BigInt
-}
+        BigInt()
+        {
+            v.push_back(0);
+        }
 
-struct Stats //uses struct to hold all the variables
-{
-    int start = 0;
-    int steps = 0;
-    int max = 0;
-    int evens = 0;
-    int odds = 0;
-    int current = 0;
+        BigInt(int n)
+        {
+            char digit;
+            while (n > 9)
+            {
+                digit = n % 10;
+                n /= 10;
+                v.push_back(digit);
+            }
+            digit = n;
+            v.push_back(digit);
+        }
+
+        BigInt(string str)
+        {
+            for (int i = str.size() - 1; i >= 0; i--)
+            {
+                v.push_back(str[i]);
+            }
+        }
+
+        BigInt operator+(BigInt b)
+        {
+            BigInt res;
+            int car = 0;
+            int i = 0, j = 0;
+            while (i < v.size() || j < b.v.size() || car > 0)
+            {
+                int sum = car;
+                if (i < v.size())
+                {
+                    sum += v[i];
+                }
+                if (j < b.v.size())
+                {
+                    sum += b.v[j];
+                }
+
+                res.v.push_back(sum % 10);
+                car = sum / 10;
+                i++;
+                j++;
+            }
+            return res;
+        }
+
+        BigInt operator++()
+        {
+            *this = *this + BigInt(1);
+            return *this;
+        }
+
+        BigInt operator++(int)
+        {
+            BigInt temp(*this);
+            *this = *this + BigInt(1);
+            return temp;
+        }
+
+        BigInt operator*(BigInt b)
+        {
+            BigInt res;
+            int car = 0;
+            for (int i = 0; i < v.size(); i++)
+            {
+                car = 0;
+                BigInt temp;
+                for (int j = 0; j < i; j++)
+                {
+                    temp.v.push_back(0);
+                }
+                for (int j = 0; j < b.v.size(); j++)
+                {
+                    int ans = v[i] * b.v[j] + car;
+                    temp.v.push_back(ans % 10);
+                    car = ans / 10;
+                }
+                if (car > 0)
+                {
+                    temp.v.push_back(car);
+                }
+                res = res + temp;
+            }
+            return res;
+        }
+
+        BigInt half() const
+        {
+            BigInt res; // this is just the Bigint num
+            int car = 0; // made a carry value
+            for (int i = v.size() - 1; i >= 0; i--) //just a loop that goes through each digit in the BigINt
+            {
+                int cur = (v[i] + car * 10) /2;
+                if (i != 0 || cur != 0)
+                {
+                    res.v.push_back(cur);
+                }
+                car = v[i] % 2;
+            }
+            return res;
+        }
+        bool isOdd() const
+        {
+            return v[0] % 2 != 0;
+        }
+        bool isEven() const
+        {
+            return v[0] % 2 == 0;
+        }
+
+        bool operator==(BigInt b) const
+        {
+            for (int i = 0; i < v.size(); i++)
+            {
+                if (v[i] != b.v[i])
+                {
+                    return false;
+                }
+            }
+            return true;
+        }
+
+        bool operator<(BigInt b) const
+        {
+            if (v.size() > b.v.size())
+            {
+                return false;
+            }
+            for (int i = v.size() - 1; i >= 0; i--)
+            {
+                if (v[i] < b.v[i])
+                {
+                    return true;
+                }
+                if (v[i] > b.v[i])
+                {
+                    return false;
+                }
+            }
+            return false;
+        }
+
+    friend ostream& operator<<(ostream& os, const BigInt& num)
+    {
+        for (int i = 0; i < num.v.size(); i++)
+        {
+            cout << (int)num.v[i];
+        }
+        return os;
+    }
+
 };
 
-void rec(int n, int current, Stats& stats) //recursion function 
+
+
+struct ThreeNp1
 {
-    if (n <= 0)
-    {
-        return;
-    }
+    BigInt start;
+    BigInt steps;
+    BigInt max;
+    BigInt odd;
+    BigInt even;
+};
 
-    if (n > stats.max)
-    {
-        stats.max = n;
-    }
-
-    if (n == 1)
-    {
-        return;
-    }
-
-    stats.steps++; //increments steps each time an operation is performed on n
-    stats.current = current; //current variable that keeps track of the number being calculated on
-
-    if (n % 2 == 0) //calculates if the number is even and divides it if true, then applies recursion
-    {
-        stats.evens++;
-        int even = n/2;
-        cout << "->(" << even << ")";
-        rec(even, even, stats);
-    }
-    else //if the number is odd then mulitplies by 3 and adds 1, then applies recursion
-    {
-        stats.odds++;
-        int odd = (3*n)+1;
-        if (odd < n)
-        {
-            throw "overflow detected for n:"; //throw
-        }
-        cout << "->(" << odd << ")";
-        rec(odd, odd, stats);
-    }
+void print(ThreeNp1 temp)
+{
+    cout << "start:"<<temp.start<<endl;
+    cout << "steps:"<<temp.steps<<endl;
+    cout << "max:"<<temp.max<<endl;
+    cout << "odd:"<<temp.odd<<endl;
+    cout << "even:"<<temp.even<<endl;
 }
 
-
-int main(int argc, char* argv[])
+void findThreeNp1(BigInt n, ThreeNp1& Np1, bool printSteps = false)
 {
-    vector<Stats> stat_Vec;
-    //int max = INT_MAX;
-    int odds = 0;
-    int evens = 0;
-
-    if (argc == 1) //used if no command line parameters are inputted 
+    if (printSteps)
     {
-        int n;
-        cout << "Enter a 3n+1 candidate number: ";
-        cin >> n; //user input
-        cout << "->(" << n << ")";
+        cout << "->"<<'('<< n <<')';
+    }
+    
+    if (Np1.max < n)
+    {
+        Np1.max = n;
+    }
 
-        Stats stats;
+    if (n == BigInt(1))
+    {
+        return;
+    }
 
-        if (n <= 0)
-        {
-            cerr << "Invalid Input" << endl;
-            return 0;
-        }
+    else if (n.isEven())
+    {
+        Np1.even++;
+        Np1.steps++;
+        findThreeNp1(n.half(), Np1, printSteps);
+    }
 
-        try
-        {
-            rec(n, n, stats);//tries the recursion function and sees if there is an error, with throw already implemented into the recursion function
-        }
-        catch(const char* msg) //catch function pops if an overflow occurs and uses the throw string to print out an error
-        {
-            cerr << "->(###overflow###)" << endl;
-            cerr << msg << stats.current << endl;
-            cerr << "3n+1:" << stats.current * 3 + 1 << endl;
-            cerr << "something broke dude\noverflow" << endl;
-            return 0;
-        }
-
-        stats.start = n;
-        stat_Vec.push_back(stats);
-
-        cout << endl;
-        cout << "start:" << n << endl;
-        cout << "steps:" << stats.steps << endl;
-        cout << "max:" << stats.max << endl;
-        cout << "odds:" << stats.odds << endl;
-        cout << "evens:" << stats.evens << endl;
+    else if (n.isOdd())
+    {
+        Np1.odd++;
+        Np1.steps++;
+        BigInt tempN(n);
+        findThreeNp1(n*BigInt(3)+BigInt(1), Np1, printSteps);
     }
 
     else
     {
-        for (int i = 1; i < argc; i++)//if there is more than one command line parameter
-        {
-            int n = stoi(argv[i]);
-            cout << "\nSolving 3n+1 - starting value:" << n << endl;
-            cout << "->(" << n << ")";
-
-            if (n <= 0)
-            {
-                cerr << "Invalid Input" << endl;
-                continue;
-            }
-
-            Stats stats;
-
-            try
-            {
-                rec(n, n, stats);//again uses try to run the recursion and checks for error
-            }
-            catch(const char* msg)//again catch is implemented 
-            {
-                //cerr << "Solving 3n+1 - starting value:" << n << endl;
-                cerr << "->(###overflow###)" << endl;
-                cerr << msg << stats.current << endl;
-                cerr << "3n+1:" << stats.current * 3 + 1 << endl;
-                cerr << "something broke dude\noverflow" << endl;
-                continue;
-            }
-
-            stats.start = n;
-            stat_Vec.push_back(stats);
-
-            if (n > stats.max)
-            {
-                stats.max = n;
-            }
-
-            /*cerr << "Solving 3n+1 - starting value:" << n << endl;
-            cerr << "->(" << n << ") " << endl;*/
-            cout << endl;
-            cout << "start:" << n << endl;
-            cout << "steps:" << stats.steps << endl;
-            cout << "max:" << stats.max << endl;
-            cout << "odds:" << stats.odds << endl;
-            cout << "evens:" << stats.evens << endl;
-            
-        }
+        cout << "How the hell did I get here?\n";
+        return;
     }
+}
+
+int main()
+{
+    BigInt MAX(INT_MAX);
+    cout << "The Largest integer is " << MAX << endl;
+    cout << "Twice the largest integer is " << MAX + MAX << endl;
+    BigInt start(12);
+    bool printSteps = false;
+    ThreeNp1 N = {start, 0, 0, 0, 0};
+    findThreeNp1(start, N, printSteps);
+    cout << endl;
+    print(N);
 
     return 0;
 }
